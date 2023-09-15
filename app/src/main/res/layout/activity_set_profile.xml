@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="@string/custom_id"
+                android:textColor="@color/text_color_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edit_custom_id"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="6dp"
+                android:height="40dp"
+                android:background="@drawable/selector_edit_text_bg"
+                android:hint="@string/enter_custom_id"
+                android:inputType="text"
+                android:lines="1"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/text_color_primary"
+                android:textColorHint="@color/md_grey_400"
+                android:textCursorDrawable="@drawable/shape_cursor_color"
+                android:textSize="15sp"
+                tools:ignore="Autofill" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/asset_name"
+                android:textColor="@color/text_color_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edit_asset_name"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/selector_edit_text_bg"
+                android:hint="@string/enter_asset_name"
+                android:inputType="text"
+                android:lines="1"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/text_color_primary"
+                android:textColorHint="@color/md_grey_400"
+                android:textCursorDrawable="@drawable/shape_cursor_color"
+                android:textSize="15sp"
+                tools:ignore="Autofill,TextFields" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/asset_description"
+                android:textColor="@color/text_color_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edit_asset_description"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/selector_edit_text_bg"
+                android:hint="@string/enter_asset_description"
+                android:inputType="text"
+                android:lines="1"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/text_color_primary"
+                android:textColorHint="@color/md_grey_400"
+                android:textCursorDrawable="@drawable/shape_cursor_color"
+                android:textSize="15sp"
+                tools:ignore="Autofill,TextFields" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/asset_attributes"
+                android:textColor="@color/text_color_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edit_asset_attributes"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/selector_edit_text_bg"
+                android:hint="@string/enter_asset_attributes"
+                android:inputType="text"
+                android:lines="1"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/text_color_primary"
+                android:textColorHint="@color/md_grey_400"
+                android:textCursorDrawable="@drawable/shape_cursor_color"
+                android:textSize="15sp"
+                tools:ignore="Autofill,TextFields" />
+
+            <TextView
+                android:id="@+id/create_new_asset"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/route_nav_bg"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:text="@string/create_asset"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/asset_id"
+                android:textColor="@color/text_color_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edit_asset_id"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/selector_edit_text_bg"
+                android:hint="@string/enter_asset_id"
+                android:inputType="text"
+                android:lines="1"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/text_color_primary"
+                android:textColorHint="@color/md_grey_400"
+                android:textCursorDrawable="@drawable/shape_cursor_color"
+                android:textSize="15sp"
+                tools:ignore="Autofill,TextFields" />
+
+            <TextView
+                android:id="@+id/bind_asset"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/dialog_radius_5_415e_bg"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:text="@string/bind_asset"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/your_asset_id"
+                android:textColor="@color/text_color_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/last_used_asset_id"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="50dp"
+                android:height="40dp"
+                android:background="@drawable/selector_edit_text_bg"
+                android:hint="@string/display_asset_id"
+                android:inputType="none"
+                android:lines="1"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/text_color_primary"
+                android:textColorHint="@color/md_grey_400"
+                android:textCursorDrawable="@drawable/shape_cursor_color"
+                android:textIsSelectable="true"
+                android:textSize="15sp"
+                tools:ignore="Autofill" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/saving_progress"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+</FrameLayout>

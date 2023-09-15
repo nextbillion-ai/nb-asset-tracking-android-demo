@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">NbAssetTrackingDemo</string>
+    <string name="start_tracking">start tracking</string>
+    <string name="stop_tracking">stop tracking</string>
+    <string name="edit_asset_profile">Edit Asset Profile</string>
+    <string name="your_asset_id">Your last used asset id: </string>
+    <string name="display_asset_id">Your last used asset id will be shown here</string>
+
+    <string name="custom_id">Custom Id</string>
+    <string name="enter_custom_id">Enter your custom id here</string>
+    <string name="asset_name">Asset Name</string>
+    <string name="enter_asset_name">Enter your asset name here</string>
+    <string name="asset_description">Asset Description</string>
+    <string name="enter_asset_description">Enter your asset description here</string>
+    <string name="asset_attributes">Asset Attributes</string>
+    <string name="enter_asset_attributes">enter your asset attributes here</string>
+    <string name="create_asset">Create new Asset</string>
+
+    <string name="asset_name_example_value">my car</string>
+    <string name="asset_description_example_value">a luxury BMW</string>
+    <string name="asset_attribute_example_value">a test attribute</string>
+
+    <string name="asset_id">Asset id</string>
+    <string name="enter_asset_id">Enter existing Asset id here</string>
+    <string name="bind_asset">Bind Asset</string>
+
+    <string name="please_enter_name">Please enter asset name</string>
+
+    <string name="record_name">record name: </string>
+    <string name="record_status">record status: </string>
+    <string name="asset_id_text">asset id: </string>
+
+    <string name="update_asset">Update Asset</string>
+    <string name="get_asset_detail">Get Asset Detail</string>
+
+    <string name="update_location_config">Update Location Config</string>
+    <string name="update_notification_config">Update Notification Config</string>
+    <string name="update_data_tracking_config">Update DataTracking Config</string>
+
+    <string name="activity_main">Main Activity</string>
+    <string name="activity_simple_tracking">Simple Tracking Activity</string>
+    <string name="activity_asset_profile">Asset Profile Operation Activity</string>
+    <string name="activity_get_asset_callback">Get Asset Callback Activity</string>
+    <string name="activity_update_configuration">Update Tracking Configuration Activity</string>
+
+    <string name="description_activity_main">A comprehensive example of the SDK integration</string>
+    <string name="description_activity_simple_tracking">A simple tracking example of the SDK integration</string>
+    <string name="description_activity_asset_profile">Asset Profile related operation example of the SDK integration</string>
+    <string name="description_activity_get_asset_callback">Example of getting the asset tracking related callback from activity</string>
+    <string name="description_activity_update_configuration">Example of updating the tracking related configuration at runtime</string>
+</resources>
