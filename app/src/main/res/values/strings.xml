@@ -37,7 +37,7 @@
     <string name="update_notification_config">Update Notification Config</string>
     <string name="update_data_tracking_config">Update DataTracking Config</string>
 
-    <string name="activity_main">Main Activity</string>
+    <string name="extended_tracking_activity">Extended Activity</string>
     <string name="activity_simple_tracking">Simple Tracking Activity</string>
     <string name="activity_asset_profile">Asset Profile Operation Activity</string>
     <string name="activity_get_asset_callback">Get Asset Callback Activity</string>
