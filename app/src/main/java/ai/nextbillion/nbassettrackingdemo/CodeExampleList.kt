@@ -58,7 +58,7 @@ class CodeExampleList : AppCompatActivity(), CodeExampleListAdapter.OnItemClickL
 
         activityList.add(
             CodeExampleListItem(
-                getString(R.string.activity_main),
+                getString(R.string.extended_tracking_activity),
                 getString(R.string.description_activity_main),
                 ExtendedTrackingActivity::class.java
             )
