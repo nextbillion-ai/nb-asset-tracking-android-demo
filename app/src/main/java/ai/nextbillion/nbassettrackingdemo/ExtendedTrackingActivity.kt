@@ -192,11 +192,7 @@ class ExtendedTrackingActivity : AppCompatActivity(), View.OnClickListener,
 
                 override fun onPermissionResult(granted: Boolean) {
                     if (granted) {
-                        if (isBackgroundLocationPermissionGranted(this@ExtendedTrackingActivity)) {
-                            startTracking()
-                        } else {
-                            permissionsManager?.requestBackgroundLocationPermissions(this@ExtendedTrackingActivity)
-                        }
+                        startTracking()
                     } else {
                         Toast.makeText(
                             this@ExtendedTrackingActivity, "You need to accept location permissions.$granted",

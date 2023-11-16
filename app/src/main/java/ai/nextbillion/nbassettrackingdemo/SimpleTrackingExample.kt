@@ -1,5 +1,6 @@
 package ai.nextbillion.nbassettrackingdemo
 
+import ai.nextbillion.assettracking.assetTrackingAddCallback
 import ai.nextbillion.assettracking.assetTrackingStart
 import ai.nextbillion.assettracking.assetTrackingStop
 import ai.nextbillion.assettracking.bindAsset
@@ -59,6 +60,15 @@ class SimpleTrackingExample : AppCompatActivity() {
         assetIdView = findViewById(R.id.asset_id_info)
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionsManager?.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
     private fun createAsset() {
         val assetAttributes: Map<String, String> = mapOf("attribute 1" to "test 1", "attribute 2" to "test 2")
         val assetProfile = AssetProfile.Builder().setCustomId(UUID.randomUUID().toString()).setName("testName")
@@ -67,6 +77,7 @@ class SimpleTrackingExample : AppCompatActivity() {
         createNewAsset(assetProfile, object : AssetApiCallback<AssetCreationResponse> {
             @SuppressLint("SetTextI18n")
             override fun onSuccess(result: AssetCreationResponse) {
+                startTrackingButton.isEnabled = true
                 assetId = result.data.id
                 Toast.makeText(
                     this@SimpleTrackingExample,
@@ -129,14 +140,10 @@ class SimpleTrackingExample : AppCompatActivity() {
 
                 override fun onPermissionResult(granted: Boolean) {
                     if (granted) {
-                        if (LocationPermissionsManager.isBackgroundLocationPermissionGranted(this@SimpleTrackingExample)) {
-                            startTracking()
-                        } else {
-                            permissionsManager?.requestBackgroundLocationPermissions(this@SimpleTrackingExample)
-                        }
+                        startTracking()
                     } else {
                         Toast.makeText(
-                            this@SimpleTrackingExample, "You need to accept location permissions.$granted",
+                            this@SimpleTrackingExample, "You need to accept location permissions.",
                             Toast.LENGTH_SHORT
                         ).show()
                     }

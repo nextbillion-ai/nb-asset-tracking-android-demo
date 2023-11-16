@@ -62,6 +62,15 @@ class UpdateConfiguration : AppCompatActivity() {
         initView()
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionsManager?.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         // add this to avoid blocking other example, could remove in real usage
@@ -198,6 +207,9 @@ class UpdateConfiguration : AppCompatActivity() {
                     ),
                     Toast.LENGTH_LONG
                 ).show()
+                updateLocationConfigButton.isEnabled = true
+                updateNotificationConfigButton.isEnabled = true
+                updateDataTrackingConfigButton.isEnabled = true
                 checkPermissionsAndStartTracking()
             }
 
@@ -228,14 +240,10 @@ class UpdateConfiguration : AppCompatActivity() {
 
                 override fun onPermissionResult(granted: Boolean) {
                     if (granted) {
-                        if (LocationPermissionsManager.isBackgroundLocationPermissionGranted(this@UpdateConfiguration)) {
-                            startTracking()
-                        } else {
-                            permissionsManager?.requestBackgroundLocationPermissions(this@UpdateConfiguration)
-                        }
+                        startTracking()
                     } else {
                         Toast.makeText(
-                            this@UpdateConfiguration, "You need to accept location permissions.$granted",
+                            this@UpdateConfiguration, "You need to accept location permissions.",
                             Toast.LENGTH_SHORT
                         ).show()
                     }

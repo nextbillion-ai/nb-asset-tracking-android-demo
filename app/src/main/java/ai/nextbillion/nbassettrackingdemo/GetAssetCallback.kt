@@ -65,6 +65,15 @@ class GetAssetCallback : AppCompatActivity(), AssetTrackingCallBack {
         locationInfoView = findViewById(R.id.callback_location_info)
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionsManager?.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         assetTrackingRemoveCallback(this)
@@ -173,11 +182,7 @@ class GetAssetCallback : AppCompatActivity(), AssetTrackingCallBack {
 
                 override fun onPermissionResult(granted: Boolean) {
                     if (granted) {
-                        if (LocationPermissionsManager.isBackgroundLocationPermissionGranted(this@GetAssetCallback)) {
-                            assetTrackingStart()
-                        } else {
-                            permissionsManager?.requestBackgroundLocationPermissions(this@GetAssetCallback)
-                        }
+                        assetTrackingStart()
                     } else {
                         Toast.makeText(
                             this@GetAssetCallback, "You need to accept location permissions.$granted",
