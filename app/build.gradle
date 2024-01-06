@@ -51,7 +51,7 @@ configurations.all {
 }
 
 dependencies {
-    def nbPluginVersion = "0.2.0"
+    def nbPluginVersion = "0.2.1"
 
     implementation "ai.nextbillion:nb-asset-tracking:$nbPluginVersion"
     implementation "ai.nextbillion:data-collection-api:$nbPluginVersion"
