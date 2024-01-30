@@ -6,6 +6,7 @@ import ai.nextbillion.assettracking.entity.AssetTrackingApiExceptionType
 import ai.nextbillion.network.AssetApiCallback
 import ai.nextbillion.network.AssetException
 import ai.nextbillion.network.AssetProfile
+import ai.nextbillion.network.UnreportedDataException
 import ai.nextbillion.network.create.AssetCreationResponse
 import android.app.AlertDialog
 import android.content.Context
@@ -196,7 +197,7 @@ class SetProfileActivity : AppCompatActivity() {
 
                         val exceptionMessage = exception.message ?: ""
 
-                        if (exceptionMessage.contains(AssetTrackingApiExceptionType.UN_UPLOADED_LOCATION_DATA.exceptionString)) {
+                        if (exception is UnreportedDataException) {
                             showForceBindDialog(assetId, exceptionMessage)
                         } else {
                             Toast.makeText(
