@@ -1,14 +1,17 @@
 package ai.nextbillion.nbassettrackingdemo
 
+import ai.nextbillion.assettracking.AssetTracking
 import ai.nextbillion.assettracking.assetTrackingAddCallback
 import ai.nextbillion.assettracking.assetTrackingStart
 import ai.nextbillion.assettracking.assetTrackingStop
 import ai.nextbillion.assettracking.bindAsset
 import ai.nextbillion.assettracking.createNewAsset
+import ai.nextbillion.assettracking.entity.FakeGpsConfig
 import ai.nextbillion.assettracking.initialize
 import ai.nextbillion.assettracking.location.permissions.LocationPermissionsListener
 import ai.nextbillion.assettracking.location.permissions.LocationPermissionsManager
 import ai.nextbillion.network.AssetApiCallback
+import ai.nextbillion.network.AssetException
 import ai.nextbillion.network.AssetProfile
 import ai.nextbillion.network.create.AssetCreationResponse
 import android.annotation.SuppressLint
@@ -41,6 +44,7 @@ class SimpleTrackingExample : AppCompatActivity() {
         // initialize the Asset Tracking SDK
         initialize(Constants.DEFAULT_API_KEY)
 
+        AssetTracking.instance.setFakeGpsConfig(FakeGpsConfig(allowUseVirtualLocation = true))
         createAsset()
     }
 
@@ -88,7 +92,7 @@ class SimpleTrackingExample : AppCompatActivity() {
                 assetIdView.text = "current asset id is: $assetId"
             }
 
-            override fun onFailure(exception: Exception) {
+            override fun onFailure(exception: AssetException) {
                 Toast.makeText(
                     this@SimpleTrackingExample,
                     "create asset failed with error: " + exception.message,
@@ -113,7 +117,7 @@ class SimpleTrackingExample : AppCompatActivity() {
                 checkPermissionsAndStartTracking()
             }
 
-            override fun onFailure(exception: Exception) {
+            override fun onFailure(exception: AssetException) {
                 val exceptionMessage = exception.message ?: ""
                 Toast.makeText(
                     this@SimpleTrackingExample,

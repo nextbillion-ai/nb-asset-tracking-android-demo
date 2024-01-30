@@ -4,6 +4,7 @@ import ai.nextbillion.assettracking.AssetTracking
 import ai.nextbillion.assettracking.assetTrackingIsRunning
 import ai.nextbillion.assettracking.entity.AssetTrackingApiExceptionType
 import ai.nextbillion.network.AssetApiCallback
+import ai.nextbillion.network.AssetException
 import ai.nextbillion.network.AssetProfile
 import ai.nextbillion.network.create.AssetCreationResponse
 import android.app.AlertDialog
@@ -143,7 +144,7 @@ class SetProfileActivity : AppCompatActivity() {
                         saveToSharedPreference()
                     }
 
-                    override fun onFailure(exception: Exception) {
+                    override fun onFailure(exception: AssetException) {
                         progressBar.visibility = View.GONE
                         Toast.makeText(
                             this@SetProfileActivity,
@@ -190,7 +191,7 @@ class SetProfileActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun onFailure(exception: Exception) {
+                    override fun onFailure(exception: AssetException) {
                         progressBar.visibility = View.GONE
 
                         val exceptionMessage = exception.message ?: ""
@@ -203,8 +204,7 @@ class SetProfileActivity : AppCompatActivity() {
                                 "bind asset failed: $exceptionMessage",
                                 Toast.LENGTH_LONG
                             ).show()
-                        }
-                    }
+                        }                    }
                 })
         }
     }
@@ -240,15 +240,14 @@ class SetProfileActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(exception: Exception) {
+                override fun onFailure(exception: AssetException) {
                     progressBar.visibility = View.GONE
 
                     Toast.makeText(
                         this@SetProfileActivity,
                         "bind asset failed: " + exception.message,
                         Toast.LENGTH_LONG
-                    ).show()
-                }
+                    ).show()                }
             })
         }
 

@@ -6,6 +6,7 @@ import ai.nextbillion.assettracking.getAssetInfo
 import ai.nextbillion.assettracking.initialize
 import ai.nextbillion.assettracking.updateAssetInfo
 import ai.nextbillion.network.AssetApiCallback
+import ai.nextbillion.network.AssetException
 import ai.nextbillion.network.AssetProfile
 import ai.nextbillion.network.create.AssetCreationResponse
 import ai.nextbillion.network.get.Asset
@@ -87,14 +88,13 @@ class AssetProfileOperations : AppCompatActivity() {
                 assetDetailView.text = "asset profile is: $assetJsonString"
             }
 
-            override fun onFailure(exception: Exception) {
+            override fun onFailure(exception: AssetException) {
                 val exceptionMessage = exception.message ?: ""
                 Toast.makeText(
                     this@AssetProfileOperations,
                     "update asset profile failed with error: $exceptionMessage",
                     Toast.LENGTH_LONG
-                ).show()
-            }
+                ).show()            }
         })
     }
 
@@ -111,14 +111,13 @@ class AssetProfileOperations : AppCompatActivity() {
                 ).show()
             }
 
-            override fun onFailure(exception: Exception) {
+            override fun onFailure(exception: AssetException) {
                 val exceptionMessage = exception.message ?: ""
                 Toast.makeText(
                     this@AssetProfileOperations,
                     "bind asset failed: $exceptionMessage",
                     Toast.LENGTH_LONG
-                ).show()
-            }
+                ).show()            }
         })
     }
 
@@ -142,14 +141,13 @@ class AssetProfileOperations : AppCompatActivity() {
                 assetDetailView.text = "asset profile is: $assetJsonString"
             }
 
-            override fun onFailure(exception: Exception) {
+            override fun onFailure(exception: AssetException) {
                 val exceptionMessage = exception.message ?: ""
                 Toast.makeText(
                     this@AssetProfileOperations,
                     "update asset profile failed with error: $exceptionMessage",
                     Toast.LENGTH_LONG
-                ).show()
-            }
+                ).show()            }
 
         })
     }
@@ -164,14 +162,13 @@ class AssetProfileOperations : AppCompatActivity() {
                 assetDetailView.text = "full asset info: $assetJsonString"
             }
 
-            override fun onFailure(exception: Exception) {
+            override fun onFailure(exception: AssetException) {
                 val exceptionMessage = exception.message ?: ""
                 Toast.makeText(
                     this@AssetProfileOperations,
                     "bind asset failed: $exceptionMessage",
                     Toast.LENGTH_LONG
-                ).show()
-            }
+                ).show()            }
         })
     }
 

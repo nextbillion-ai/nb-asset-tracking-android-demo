@@ -2,6 +2,7 @@ package ai.nextbillion.nbassettrackingdemo
 
 import ai.nextbillion.assettracking.*
 import ai.nextbillion.assettracking.callback.AssetTrackingCallBack
+import ai.nextbillion.assettracking.entity.FakeGpsConfig
 import ai.nextbillion.assettracking.entity.LocationConfig
 import ai.nextbillion.assettracking.entity.TrackingDisableType
 import ai.nextbillion.assettracking.location.engine.TrackingMode
@@ -11,6 +12,7 @@ import ai.nextbillion.assettracking.location.permissions.LocationPermissionsMana
 import ai.nextbillion.assettracking.location.permissions.LocationPermissionsManager.Companion.isBackgroundLocationPermissionGranted
 import ai.nextbillion.assettracking.location.permissions.LocationPermissionsManager.Companion.isLocationServiceEnabled
 import ai.nextbillion.network.AssetApiCallback
+import ai.nextbillion.network.AssetException
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
@@ -51,7 +53,7 @@ class ExtendedTrackingActivity : AppCompatActivity(), View.OnClickListener,
         // custom location engine
 //        TrackingSDK.setLocationEngine(CustomLocationEngine());
         initialize(Constants.DEFAULT_API_KEY)
-
+        assetTrackingSetFakeGpsConfig(FakeGpsConfig(allowUseVirtualLocation = true))
         initView()
 
         assetTrackingAddCallback(this)
@@ -77,7 +79,7 @@ class ExtendedTrackingActivity : AppCompatActivity(), View.OnClickListener,
                         ).show()
                     }
 
-                    override fun onFailure(exception: Exception) {
+                    override fun onFailure(exception: AssetException) {
                         Toast.makeText(
                             this@ExtendedTrackingActivity,
                             "bind asset failed: " + exception.message,
