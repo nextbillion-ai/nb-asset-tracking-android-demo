@@ -12,6 +12,7 @@ import ai.nextbillion.assettracking.initialize
 import ai.nextbillion.assettracking.location.permissions.LocationPermissionsListener
 import ai.nextbillion.assettracking.location.permissions.LocationPermissionsManager
 import ai.nextbillion.network.AssetApiCallback
+import ai.nextbillion.network.AssetException
 import ai.nextbillion.network.AssetProfile
 import ai.nextbillion.network.create.AssetCreationResponse
 import android.annotation.SuppressLint
@@ -130,7 +131,7 @@ class GetAssetCallback : AppCompatActivity(), AssetTrackingCallBack {
                 onBindAsset()
             }
 
-            override fun onFailure(exception: Exception) {
+            override fun onFailure(exception: AssetException) {
                 Toast.makeText(
                     this@GetAssetCallback,
                     "create asset failed with error: " + exception.message,
@@ -154,7 +155,7 @@ class GetAssetCallback : AppCompatActivity(), AssetTrackingCallBack {
                 ).show()
             }
 
-            override fun onFailure(exception: Exception) {
+            override fun onFailure(exception: AssetException) {
                 val exceptionMessage = exception.message ?: ""
                 Toast.makeText(
                     this@GetAssetCallback,

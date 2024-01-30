@@ -20,6 +20,7 @@ import ai.nextbillion.assettracking.location.engine.TrackingMode
 import ai.nextbillion.assettracking.location.permissions.LocationPermissionsListener
 import ai.nextbillion.assettracking.location.permissions.LocationPermissionsManager
 import ai.nextbillion.network.AssetApiCallback
+import ai.nextbillion.network.AssetException
 import ai.nextbillion.network.AssetProfile
 import ai.nextbillion.network.create.AssetCreationResponse
 import android.annotation.SuppressLint
@@ -143,9 +144,6 @@ class UpdateConfiguration : AppCompatActivity() {
         // You can either choose the specified tracking mode, or use self-defined
         locationConfig = LocationConfig(
             trackingMode = TrackingMode.ACTIVE,
-            maxWaitTime = 10000,
-            fastestInterval = 1000,
-            enableStationaryCheck = false
         )
 
         notificationConfig = NotificationConfig(channelId = "Custom.ID", channelName = "Custom.Name")
@@ -185,7 +183,7 @@ class UpdateConfiguration : AppCompatActivity() {
                 bindAssetAndStartTracking()
             }
 
-            override fun onFailure(exception: Exception) {
+            override fun onFailure(exception: AssetException) {
                 Toast.makeText(
                     this@UpdateConfiguration,
                     "create asset failed with error: " + exception.message,
@@ -213,7 +211,7 @@ class UpdateConfiguration : AppCompatActivity() {
                 checkPermissionsAndStartTracking()
             }
 
-            override fun onFailure(exception: Exception) {
+            override fun onFailure(exception: AssetException) {
                 val exceptionMessage = exception.message ?: ""
                 Toast.makeText(
                     this@UpdateConfiguration,
