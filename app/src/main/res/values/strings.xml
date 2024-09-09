@@ -48,4 +48,6 @@
     <string name="description_activity_asset_profile">Asset Profile related operation example of the SDK integration</string>
     <string name="description_activity_get_asset_callback">Example of getting the asset tracking related callback from activity</string>
     <string name="description_activity_update_configuration">Example of updating the tracking related configuration at runtime</string>
+    <string name="stop_trip">stop trip</string>
+    <string name="start_trip">start trip</string>
 </resources>

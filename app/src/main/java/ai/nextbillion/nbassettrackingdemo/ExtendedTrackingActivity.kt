@@ -5,43 +5,42 @@ import ai.nextbillion.assettracking.callback.AssetTrackingCallBack
 import ai.nextbillion.assettracking.entity.FakeGpsConfig
 import ai.nextbillion.assettracking.entity.LocationConfig
 import ai.nextbillion.assettracking.entity.TrackingDisableType
+import ai.nextbillion.assettracking.entity.TripStatus
+import ai.nextbillion.assettracking.extension.log
 import ai.nextbillion.assettracking.location.engine.TrackingMode
 import ai.nextbillion.assettracking.location.permissions.LocationPermissionsListener
 import ai.nextbillion.assettracking.location.permissions.LocationPermissionsManager
 import ai.nextbillion.assettracking.location.permissions.LocationPermissionsManager.Companion.areAllLocationPermissionGranted
-import ai.nextbillion.assettracking.location.permissions.LocationPermissionsManager.Companion.isBackgroundLocationPermissionGranted
 import ai.nextbillion.assettracking.location.permissions.LocationPermissionsManager.Companion.isLocationServiceEnabled
+import ai.nextbillion.datacollection.NBAssetData
+import ai.nextbillion.nbassettrackingdemo.databinding.ActivityExtendedTrackingBinding
 import ai.nextbillion.network.AssetApiCallback
 import ai.nextbillion.network.AssetException
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.location.Location
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.os.Handler
 import android.os.Looper
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.forEach
 
 
 class ExtendedTrackingActivity : AppCompatActivity(), View.OnClickListener,
     AssetTrackingCallBack {
-    private lateinit var startTrackingButton: Button
-    private lateinit var stopTrackingButton: Button
-    private lateinit var radioGroup: RadioGroup
-    private lateinit var activeRadioButton: RadioButton
-    private lateinit var trackingStatusView: TextView
-    private lateinit var locationEngineInfoView: TextView
-    private lateinit var locationInfoView: TextView
-    private lateinit var editAssetProfileView: TextView
+    private var permissionsManager: LocationPermissionsManager? = null
+    private var currentSelectedTrackingMode: MultiTrackingMode = MultiTrackingMode.ACTIVE
 
+    private lateinit var sharedPreferences: SharedPreferences
 
-    var permissionsManager: LocationPermissionsManager? = null
-    var currentSelectedTrackingMode = TrackingMode.ACTIVE
+    private lateinit var binding: ActivityExtendedTrackingBinding
 
     private val mainHandler by lazy {
         Handler(Looper.getMainLooper())
@@ -49,19 +48,20 @@ class ExtendedTrackingActivity : AppCompatActivity(), View.OnClickListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_extended_tracking)
-        // custom location engine
-//        TrackingSDK.setLocationEngine(CustomLocationEngine());
-        initialize(Constants.DEFAULT_API_KEY)
-        assetTrackingSetFakeGpsConfig(FakeGpsConfig(allowUseVirtualLocation = true))
-        initView()
+        binding = ActivityExtendedTrackingBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
+        supportActionBar?.title = "Asset tracking"
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        initialize(Constants.DEFAULT_API_KEY)
+        initView()
         assetTrackingAddCallback(this)
         bindExistingAsset()
     }
 
     private fun bindExistingAsset() {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val assetId = sharedPreferences.getString(Constants.LAST_ASSET_ID_KEY, "") as String
         if (assetId.isNotEmpty()) {
             AssetTracking.instance.bindAsset(
@@ -99,26 +99,24 @@ class ExtendedTrackingActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun initView() {
-        startTrackingButton = findViewById(R.id.start_tracking)
-        stopTrackingButton = findViewById(R.id.stop_tracking)
-        startTrackingButton.setOnClickListener(this)
-        stopTrackingButton.setOnClickListener(this)
+        binding.radioButtonActive.isChecked = true
+        binding.startTracking.setOnClickListener(this)
+        binding.stopTracking.setOnClickListener(this)
+        binding.startTrip.setOnClickListener(this)
+        binding.stopTrip.setOnClickListener(this)
 
-        activeRadioButton = findViewById(R.id.radioButtonActive)
-        activeRadioButton.isChecked = true
 
-        radioGroup = findViewById(R.id.radioGroup)
-        radioGroup.setOnCheckedChangeListener { group, checkedId ->
-            currentSelectedTrackingMode = enumValues<TrackingMode>().find {
-                it.value == group.indexOfChild(group.findViewById(checkedId))
-            }!!
-            AssetTracking.instance.updateLocationConfig(this, LocationConfig(currentSelectedTrackingMode))
+        binding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
+            configSelectedTrackingMode(checkedId)
         }
 
-        editAssetProfileView = findViewById(R.id.edit_asset_profile)
-        editAssetProfileView.setOnClickListener {
+        binding.editAssetProfile.setOnClickListener {
             if (AssetTracking.instance.isRunning(this)) {
-                Toast.makeText(this, "please stop tracking before editing asset profile", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    "please stop tracking before editing asset profile",
+                    Toast.LENGTH_LONG
+                ).show()
                 return@setOnClickListener
             }
 
@@ -127,9 +125,26 @@ class ExtendedTrackingActivity : AppCompatActivity(), View.OnClickListener,
             startActivity(intent)
         }
 
-        trackingStatusView = findViewById(R.id.isStopTracking)
-        locationEngineInfoView = findViewById(R.id.locationEngineInfo)
-        locationInfoView = findViewById(R.id.locationInfo)
+        binding.mockLocationSb.setOnCheckedChangeListener { _, isChecked ->
+            assetTrackingUpdateFakeGpsConfig(FakeGpsConfig(isChecked))
+        }
+
+        updateTrackingStatus()
+    }
+
+    private fun configSelectedTrackingMode(checkedId: Int) {
+        currentSelectedTrackingMode = when (checkedId) {
+            R.id.radioButtonActive -> MultiTrackingMode.ACTIVE
+            R.id.radioButtonBalanced -> MultiTrackingMode.BALANCED
+            R.id.radioButtonPassive -> MultiTrackingMode.PASSIVE
+            R.id.radioButtonTimeInterval -> MultiTrackingMode.TIME_INTERVAL
+            R.id.radioButtonDistanceInterval -> MultiTrackingMode.DISTANCE_INTERVAL
+            else -> MultiTrackingMode.ACTIVE
+        }
+        binding.timeInterval.visibility =
+            if (binding.radioButtonTimeInterval.isChecked) View.VISIBLE else View.GONE
+        binding.distanceInterval.visibility =
+            if (binding.radioButtonDistanceInterval.isChecked) View.VISIBLE else View.GONE
     }
 
     @SuppressLint("SetTextI18n")
@@ -137,30 +152,124 @@ class ExtendedTrackingActivity : AppCompatActivity(), View.OnClickListener,
         if (view.id == R.id.start_tracking) {
             checkPermissionsAndStartTracking()
         } else if (view.id == R.id.stop_tracking) {
-//            TrackingSDK.stopTracking()
             assetTrackingStop()
-            updateTrackingStatus()
+        } else if (view.id == R.id.start_trip) {
+            startTrip()
+        } else if (view.id == R.id.stop_trip) {
+            endTrip()
         }
+    }
+
+    private fun startTrip() {
+
+        showInputDialog(this) {
+            assetTrackingStartTrip(it, true, object : AssetApiCallback<String> {
+                override fun onSuccess(result: String) {
+                    Toast.makeText(this@ExtendedTrackingActivity, "start trip successfully", Toast.LENGTH_LONG)
+                        .show()
+                }
+
+                override fun onFailure(exception: AssetException) {
+                    Toast.makeText(
+                        this@ExtendedTrackingActivity,
+                        "start trip failed: " + exception.message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
+
+        }
+    }
+
+    private fun endTrip() {
+        assetTrackingEndTrip(object : AssetApiCallback<String> {
+            override fun onSuccess(result: String) {
+                Toast.makeText(this@ExtendedTrackingActivity, "end trip successfully", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onFailure(exception: AssetException) {
+                Toast.makeText(
+                    this@ExtendedTrackingActivity,
+                    "end trip failed: " + exception.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateTrackingStatus() {
         Log.d("asset", "updateTrackingStatus")
-        mainHandler.postDelayed({
-            val isTrackingOn = AssetTracking.instance.isRunning(this)
-            trackingStatusView.text = "Tracking Status: " + if (isTrackingOn) "ON" else "OFF"
-            if (!isTrackingOn) {
-                locationInfoView.text = ""
-                locationEngineInfoView.text = ""
+        val isTrackingOn = AssetTracking.instance.isRunning(this)
+        binding.isStopTracking.text = "Tracking Status: " + if (isTrackingOn) "ON" else "OFF" +
+                "\nTrip Status: " + if (assetTrackingIsTripInProgress) "ON" else "OFF"
+        if (!isTrackingOn) {
+            binding.locationInfo.text = ""
+            binding.locationEngineInfo.text = ""
+            binding.startTracking.isEnabled = true
+            binding.stopTracking.isEnabled = false
+            binding.radioGroup.forEach {
+                it.isEnabled = true
+                binding.timeInterval.isEnabled = true
+                binding.distanceInterval.isEnabled = true
             }
-        }, 1000)
+        } else {
+            binding.startTracking.isEnabled = false
+            binding.stopTracking.isEnabled = true
+            binding.radioGroup.forEach {
+                it.isEnabled = false
+                binding.timeInterval.isEnabled = false
+                binding.distanceInterval.isEnabled = false
+            }
+        }
+
+        val isTripInProgress = assetTrackingIsTripInProgress
+        if (isTripInProgress) {
+            binding.startTrip.isEnabled = false
+            binding.stopTrip.isEnabled = true
+        } else {
+            binding.startTrip.isEnabled = true
+            binding.stopTrip.isEnabled = false
+        }
 
     }
 
     @SuppressLint(*["SetTextI18n", "MissingPermission"])
     fun startTracking() {
-        assetTrackingStart()
-        updateTrackingStatus()
+        log("MainActivity startTracking")
+        if (checkLocationConfig()) {
+            assetTrackingStart()
+        }
+    }
+
+    private fun checkLocationConfig(): Boolean {
+        val locationConfig: LocationConfig = when (currentSelectedTrackingMode) {
+            MultiTrackingMode.ACTIVE, MultiTrackingMode.BALANCED, MultiTrackingMode.PASSIVE -> {
+                LocationConfig(TrackingMode.fromValue(currentSelectedTrackingMode.value)!!)
+            }
+
+            MultiTrackingMode.TIME_INTERVAL -> {
+                val time = binding.timeInterval.text.toString().toLongOrNull()
+                if (time == null) {
+                    Toast.makeText(this, "Please input valid time interval", Toast.LENGTH_SHORT)
+                        .show()
+                    return false
+                }
+                LocationConfig(interval = time * 1000)
+            }
+
+            MultiTrackingMode.DISTANCE_INTERVAL -> {
+                val distance = binding.distanceInterval.text.toString().toFloatOrNull()
+                if (distance == null) {
+                    Toast.makeText(this, "Please input valid distance interval", Toast.LENGTH_SHORT)
+                        .show()
+                    return false
+                }
+                LocationConfig(smallestDisplacement = distance)
+            }
+        }
+        AssetTracking.instance.setLocationConfig(locationConfig)
+        return true
     }
 
 
@@ -226,22 +335,23 @@ class ExtendedTrackingActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onLocationSuccess(result: Location) {
-        locationInfoView.text = """
+    override fun onLocationSuccess(location: Location) {
+        log("onLocationSuccess : " + location.toString())
+        binding.locationInfo.text = """
             --------- Location Info --------- 
-            Provider: ${result.provider}
-            Latitude: ${result.latitude}
-            Longitude: ${result.longitude}
-            Altitude: ${result.altitude}
-            Accuracy: ${result.accuracy}
-            speed:${result.speed}
-            Bearing: ${result.bearing}
-            Time: ${result.time}
+            Provider: ${location.provider}
+            Latitude: ${location.latitude}
+            Longitude: ${location.longitude}
+            Altitude: ${location.altitude}
+            Accuracy: ${location.accuracy}
+            speed:${location.speed}
+            Bearing: ${location.bearing}
+            Time: ${location.time}
             """.trimIndent()
     }
 
     override fun onLocationFailure(exception: Exception) {
-        locationInfoView.text = exception.message
+        binding.locationInfo.text = exception.message
     }
 
     override fun onTrackingStart(assetId: String) {
@@ -250,6 +360,19 @@ class ExtendedTrackingActivity : AppCompatActivity(), View.OnClickListener,
 
     override fun onTrackingStop(assetId: String, trackingDisableType: TrackingDisableType) {
         Log.d("asset", "onTrackingStop")
+        mainHandler.postDelayed({
+            updateTrackingStatus()
+        }, 1000)
+    }
+
+
+    /**
+     * Invoked when the trip status changed.
+     * @param tripId the trip id
+     * @param status the trip status, see [TripStatus]
+     */
+    override fun onTripStatusChanged(tripId: String, status: TripStatus) {
+        // Handle the trip status change,
         updateTrackingStatus()
     }
 }
