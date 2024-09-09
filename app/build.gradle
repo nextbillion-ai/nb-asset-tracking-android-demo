@@ -35,6 +35,7 @@ android {
     }
     buildFeatures {
         compose true
+        viewBinding true
     }
     composeOptions {
         kotlinCompilerExtensionVersion '1.3.2'
@@ -51,7 +52,7 @@ configurations.all {
 }
 
 dependencies {
-    def nbPluginVersion = "0.2.2"
+    def nbPluginVersion = "1.0.5"
 
     implementation "ai.nextbillion:nb-asset-tracking:$nbPluginVersion"
 

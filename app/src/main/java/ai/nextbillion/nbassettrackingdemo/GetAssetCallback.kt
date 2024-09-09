@@ -8,6 +8,7 @@ import ai.nextbillion.assettracking.bindAsset
 import ai.nextbillion.assettracking.callback.AssetTrackingCallBack
 import ai.nextbillion.assettracking.createNewAsset
 import ai.nextbillion.assettracking.entity.TrackingDisableType
+import ai.nextbillion.assettracking.entity.TripStatus
 import ai.nextbillion.assettracking.initialize
 import ai.nextbillion.assettracking.location.permissions.LocationPermissionsListener
 import ai.nextbillion.assettracking.location.permissions.LocationPermissionsManager
@@ -111,6 +112,9 @@ class GetAssetCallback : AppCompatActivity(), AssetTrackingCallBack {
     override fun onTrackingStop(assetId: String, trackingDisableType: TrackingDisableType) {
         trackingStatusView.text = "Asset Tracking is OFF"
         locationInfoView.text = ""
+    }
+
+    override fun onTripStatusChanged(tripId: String, status: TripStatus) {
     }
 
     private fun createAndBindAsset() {

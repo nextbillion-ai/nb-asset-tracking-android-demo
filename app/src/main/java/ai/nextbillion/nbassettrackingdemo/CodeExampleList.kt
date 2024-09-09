@@ -26,9 +26,9 @@ class CodeExampleList : AppCompatActivity(), CodeExampleListAdapter.OnItemClickL
     private fun initActivityData() {
         activityList.add(
             CodeExampleListItem(
-                getString(R.string.activity_simple_tracking),
-                getString(R.string.description_activity_simple_tracking),
-                SimpleTrackingExample::class.java
+                getString(R.string.extended_tracking_activity),
+                getString(R.string.description_activity_main),
+                ExtendedTrackingActivity::class.java
             )
         )
 
@@ -58,9 +58,9 @@ class CodeExampleList : AppCompatActivity(), CodeExampleListAdapter.OnItemClickL
 
         activityList.add(
             CodeExampleListItem(
-                getString(R.string.extended_tracking_activity),
-                getString(R.string.description_activity_main),
-                ExtendedTrackingActivity::class.java
+                getString(R.string.activity_simple_tracking),
+                getString(R.string.description_activity_simple_tracking),
+                SimpleTrackingExample::class.java
             )
         )
     }
