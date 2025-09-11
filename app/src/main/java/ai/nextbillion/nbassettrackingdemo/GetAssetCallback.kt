@@ -73,7 +73,7 @@ class GetAssetCallback : AppCompatActivity(), AssetTrackingCallBack {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        permissionsManager?.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionsManager?.onRequestPermissionsResult(requestCode, grantResults)
     }
 
     override fun onDestroy() {

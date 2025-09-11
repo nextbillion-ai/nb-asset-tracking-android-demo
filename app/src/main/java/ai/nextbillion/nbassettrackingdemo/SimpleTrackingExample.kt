@@ -70,7 +70,7 @@ class SimpleTrackingExample : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        permissionsManager?.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionsManager?.onRequestPermissionsResult(requestCode, grantResults)
     }
 
     private fun createAsset() {
