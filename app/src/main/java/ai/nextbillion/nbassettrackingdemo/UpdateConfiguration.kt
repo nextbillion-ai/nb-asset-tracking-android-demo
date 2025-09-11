@@ -69,7 +69,7 @@ class UpdateConfiguration : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        permissionsManager?.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionsManager?.onRequestPermissionsResult(requestCode, grantResults)
     }
 
     override fun onDestroy() {

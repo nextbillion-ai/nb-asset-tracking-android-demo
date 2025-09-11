@@ -322,7 +322,7 @@ class ExtendedTrackingActivity : AppCompatActivity(), View.OnClickListener,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        permissionsManager?.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionsManager?.onRequestPermissionsResult(requestCode, grantResults)
     }
 
     private fun getTrackingModeString(trackingMode: TrackingMode): String {
